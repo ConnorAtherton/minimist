@@ -92,8 +92,7 @@ module Minimist
       #
       # match --skip=true arg types
       #
-      # TODO need to match --plan-changed=true types
-      match_data = arg.match(/^--([A-Za-z]*)=?([A-Za-z0-9]*)/)
+      match_data = arg.match(/^--([A-Za-z]*-?[A-Za-z]?*)=?([A-Za-z0-9]*)/)
 
       if !match_data[2].empty?
         argv_object[:options][match_data[1].to_sym] = try_convert(match_data[2])
@@ -108,6 +107,8 @@ module Minimist
       #
       # regex matvch --no-val into val = true
       #
+      match_data = arg.match(/^--no-([A-Za-z]*-?[A-Za-z]?*)/)
+      argv_object[:options][match_data[1].to_sym] = false
 
       [argv_object, false]
     end
