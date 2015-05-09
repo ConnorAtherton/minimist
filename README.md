@@ -1,4 +1,4 @@
-# Minimist
+# Minimist ![Build Status](https://api.travis-ci.org/ConnorAtherton/minimist.svg)
 
 A tiny ruby ARGV parser.
 
