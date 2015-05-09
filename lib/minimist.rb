@@ -7,8 +7,8 @@ module Minimist
   class << self
     REGEX  = {
       command: /^[A-Za-z]/,
-      double_dash: /^--.+/,
       double_dash_negation: /^--no-.+/,
+      double_dash: /^--.+/,
       single_dash: /^-[^-]+/
     }
 
@@ -49,8 +49,6 @@ module Minimist
         # to skip the next value or not
         #
         out, skip = send(type, arg, i, out)
-
-        puts "#{i} #{arg} #{type} - should skip #{skip}"
       end
 
       out
@@ -67,6 +65,8 @@ module Minimist
     # If the next command is
     #
     def single_dash(arg, index, argv_object)
+      should_skip = false
+
       #
       # match -abc, -n5 arg types
       #
@@ -89,25 +89,31 @@ module Minimist
     end
 
     def double_dash(arg, index, argv_object)
-      #
-      # match --skip=true arg types
-      #
-      match_data = arg.match(/^--([A-Za-z]*-?[A-Za-z]?*)=?([A-Za-z0-9]*)/)
+      match_data = arg.match(/^--([A-Za-z]*-?[A-Za-z]*)=?([A-Za-z0-9]*)/)
+      val = true
+      should_skip = false
 
       if !match_data[2].empty?
         argv_object[:options][match_data[1].to_sym] = try_convert(match_data[2])
       else
-        argv_object[:options][match_data[1].to_sym] = true
+        val = true
+
+        if @argv[index + 1] =~ REGEX[:command]
+          val = @argv[index + 1]
+          should_skip = true
+        end
+
+        argv_object[:options][match_data[1].to_sym] = val
       end
 
-      [argv_object, false]
+      [argv_object, should_skip]
     end
 
     def double_dash_negation(arg, index, argv_object)
       #
       # regex matvch --no-val into val = true
       #
-      match_data = arg.match(/^--no-([A-Za-z]*-?[A-Za-z]?*)/)
+      match_data = arg.match(/^--no-([A-Za-z]*-?[A-Za-z]*)/)
       argv_object[:options][match_data[1].to_sym] = false
 
       [argv_object, false]
