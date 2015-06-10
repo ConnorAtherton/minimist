@@ -28,17 +28,17 @@ describe Minimist do
   it 'parses multiple single dash arguments correctly' do
     result = parse('-abc')
 
-    expect(result[:options]).to eql({
+    expect(result[:options]).to eql(
       a: true,
       b: true,
       c: true
-    })
+    )
   end
 
   it 'parses single dash with a value correctly' do
     result = parse('-a4')
 
-    expect(result[:options]).to eql({ a: '4' })
+    expect(result[:options]).to eql(a: '4')
   end
 
   it 'parses double dash arguments with no value' do
@@ -63,5 +63,11 @@ describe Minimist do
     result = parse('--no-change')
 
     expect(result[:options]).to eql(change: false)
+  end
+
+  it 'converts all dashes into underscore' do
+    result = parse('--dry-run')
+
+    expect(result[:options]).to eql(dry_run: true)
   end
 end

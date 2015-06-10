@@ -73,7 +73,7 @@ module Minimist
       if match_data = arg.match(/^-([A-Za-z])([0-9])$/)
         argv_object[:options][match_data[1].to_sym] = match_data[2]
       elsif @argv[index + 1] =~ /^(\d|[A-Za-z])/
-        argv_object[:options][arg.slice(1..-1).to_sym] = try_convert(@argv[index + 1])
+        argv_object[:options][arg.slice(1..-1).to_sym] = transform(@argv[index + 1])
         should_skip = true
       else
         #
@@ -94,7 +94,7 @@ module Minimist
       should_skip = false
 
       if !match_data[2].empty?
-        argv_object[:options][match_data[1].to_sym] = try_convert(match_data[2])
+        argv_object[:options][match_data[1].to_sym] = match_data[2]
       else
         val = true
 
@@ -103,7 +103,7 @@ module Minimist
           should_skip = true
         end
 
-        argv_object[:options][match_data[1].to_sym] = val
+        argv_object[:options][transform(match_data[1].to_sym)] = val
       end
 
       [argv_object, should_skip]
@@ -119,8 +119,8 @@ module Minimist
       [argv_object, false]
     end
 
-    def try_convert(val)
-      Number(val) rescue val
+    def transform(val)
+      val.to_s.gsub('-', '_').to_sym
     end
   end
 end
