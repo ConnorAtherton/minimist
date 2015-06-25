@@ -1,5 +1,3 @@
-require "pry"
-
 require "minimist/version"
 require "minimist/errors"
 
