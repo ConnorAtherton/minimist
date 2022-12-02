@@ -70,7 +70,7 @@ module Minimist
       #
       if match_data = arg.match(/^-([A-Za-z])([0-9])$/)
         argv_object[:options][match_data[1].to_sym] = match_data[2]
-      elsif @argv[index + 1] =~ /^(\d|[A-Za-z])/
+      elsif @argv[index + 1] =~ /^(\d|[A-Za-z]|[\.\/\~])/
         argv_object[:options][arg.slice(1..-1).to_sym] = transform(@argv[index + 1])
         should_skip = true
       else
