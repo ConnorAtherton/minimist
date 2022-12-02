@@ -27,19 +27,20 @@ exactly what I needed.
 It accepts a string array and returns a hash containing commands and options.
 
 ```ruby
-Minimist.parse("parse this --with=2 -asbd -n4 --no-changes --send two".split(" "))
+Minimist.parse("parse this --with=2 -asbd -n4 --no-changes --send two -f .hidden.txt".split(" "))
 
 => {
   :commands=>["parse", "this"],
   :options=> {
-    :with=>"2",
+    :with=>:"2",
     :a=>true,
     :s=>true,
     :b=>true,
     :d=>true,
-    :n=>"4",
+    :n=>:"4",
     :changes=>false,
-    :send=>"two"
+    :send=>:two,
+    :f=>:".hidden.txt"
   }
 }
 ```
